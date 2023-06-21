@@ -42,6 +42,12 @@ namespace ProjetFinalAPI.Controllers
 
             return BadRequest();
         }
+        [HttpPut("Logout")]
+        public IActionResult Logout(int id)
+        {
+            _utilisateurService.Logout(id);
+            return Ok();
+        }
 
         [HttpGet("{id:int}")]
         

@@ -15,5 +15,6 @@ namespace DAL.Repositories
         public bool PseudoAlreadyUsed(string pseudo);
         public UtilisateurDTO Login(string email, string mdp);
         public UtilisateurDTO GetUserById(int id);
+        public void Logout(int id);
     }
 }

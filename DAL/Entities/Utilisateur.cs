@@ -18,6 +18,7 @@ namespace DAL.Entities
     public string Email { get; set; }
     public string Mdp { get; set; }
     public DateTime DateDeCreation { get; set; }   
+    public bool Connecte { get; set; }
 
     }
 }

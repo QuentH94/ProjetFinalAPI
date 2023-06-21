@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjetFinalAPI.DTO
 {
@@ -18,5 +19,7 @@ namespace ProjetFinalAPI.DTO
         [Required]
         [RegularExpression(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,25}$")]
         public string Mdp { get; set; }
+
+
     }
 }

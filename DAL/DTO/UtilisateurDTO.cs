@@ -9,5 +9,6 @@
         public string Pseudo { get; set; }
         public string Email { get; set; }
         public DateTime DateDeCreation { get; set; }
+        public bool Connecte { get; set; }
     }
 }

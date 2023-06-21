@@ -36,7 +36,16 @@ namespace DAL.Services
         public UtilisateurDTO Login(string email, string mdp)
         {      
             string sql = $"SELECT * From Utilisateur WHERE Email = '{email}' AND Mdp = [dbo].[ProjetFinalHash]('{mdp}')";
-            return connection.Query<UtilisateurDTO>(sql, new { email, mdp }).FirstOrDefault();           
+            string sql2 = $"UPDATE Utilisateur SET Connecte = 1 WHERE Email = '{email}' AND Mdp = [dbo].[ProjetFinalHash]('{mdp}')";
+            connection.Execute(sql2, new { email, mdp });
+            return connection.Query<UtilisateurDTO>(sql, new { email, mdp }).FirstOrDefault(); 
+            
+        }
+
+        public void Logout(int id)
+        {
+            string sql = $"UPDATE Utilisateur SET Connecte = 0 WHERE UtilisateurId = '{id}'";
+            connection.Execute(sql, new { id });
         }
 
         public bool PseudoAlreadyUsed(string pseudo)
