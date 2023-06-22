@@ -16,5 +16,9 @@ namespace DAL.Repositories
         public UtilisateurDTO Login(string email, string mdp);
         public UtilisateurDTO GetUserById(int id);
         public void Logout(int id);
+        public IEnumerable<UtilisateurDTO> GetAll();
+        public UtilisateurDTO GetByPseudo(string pseudo);
+        public void UpdateNomPrenom(string nom, string prenom, int id);
+        
     }
 }

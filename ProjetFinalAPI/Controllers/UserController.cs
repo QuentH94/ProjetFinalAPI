@@ -1,4 +1,5 @@
-﻿using DAL.Entities;
+﻿using BLL.Interfaces;
+using DAL.Entities;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using ProjetFinalAPI.DTO;
@@ -11,10 +12,12 @@ namespace ProjetFinalAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUtilisateurRepository _utilisateurService;
+        private readonly ILoginService _loginService;
 
-        public UserController(IUtilisateurRepository utilisateurService)
+        public UserController(IUtilisateurRepository utilisateurService, ILoginService loginService)
         {
             _utilisateurService = utilisateurService;
+            _loginService = loginService;
         }
 
         [HttpPost]
@@ -28,20 +31,23 @@ namespace ProjetFinalAPI.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult<UtilisateurDTO> Login(LoginDTO loginDto)
+        public ActionResult<string> Login(LoginDTO loginDto)
         {
             if (ModelState.IsValid)
             {
                 if (_utilisateurService.EmailAlreadyUsed(loginDto.Email))
                 {
-                    UtilisateurDTO u = _utilisateurService.Login(loginDto.Email, loginDto.Mdp);                               
-                        return u;                
+                    string? jwt = _loginService.Login(loginDto.Email,loginDto.Mdp);
+
+                    if (!string.IsNullOrEmpty(jwt))
+                    {
+                        return Ok(jwt);
+                    }
                 }
-
             }
-
             return BadRequest();
         }
+
         [HttpPut("Logout")]
         public IActionResult Logout(int id)
         {
@@ -49,8 +55,7 @@ namespace ProjetFinalAPI.Controllers
             return Ok();
         }
 
-        [HttpGet("{id:int}")]
-        
+        [HttpGet("{id:int}")]       
         public ActionResult<UtilisateurDTO> GetById(int id)
         {
             if (ModelState.IsValid)
@@ -59,6 +64,31 @@ namespace ProjetFinalAPI.Controllers
                 return user is not null ? Ok(user) : BadRequest();
             }
 
+            return BadRequest();
+        }
+
+
+        [HttpGet("pseudo")]
+        public ActionResult<UtilisateurDTO> GetByPseudo(string pseudo)
+        {
+            UtilisateurDTO user = _utilisateurService.GetByPseudo(pseudo);
+            return user is not null ? Ok(user) : BadRequest();
+        }
+
+        [HttpGet]
+        public ActionResult<UtilisateurDTO> GetAll()
+        {          
+               return Ok(_utilisateurService.GetAll());    
+        }
+
+        [HttpPatch("NomPrenom")]
+        public IActionResult UpdateNomPrenom(UpdateNomPrenomDTO uDTO,int id)
+        {
+            if (ModelState.IsValid)
+            {
+                _utilisateurService.UpdateNomPrenom(uDTO.Prenom, uDTO.Nom, id);
+                return Ok();
+            }
             return BadRequest();
         }
 

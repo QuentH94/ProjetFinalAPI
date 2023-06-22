@@ -5,6 +5,7 @@ using ProjetFinalAPI.DTO;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,10 +15,11 @@ namespace DAL.Services
     public class UtilisateurService : IUtilisateurRepository
     {
         private readonly IDbConnection connection;
-
+        
         public UtilisateurService(IDbConnection connection)
         {
             this.connection = connection;
+           
         }
 
         public bool EmailAlreadyUsed(string email)
@@ -27,6 +29,18 @@ namespace DAL.Services
             return exists;
         }
 
+        public IEnumerable<UtilisateurDTO> GetAll()
+        {
+            string sql = $"SELECT * FROM Utilisateur";
+            return connection.Query<UtilisateurDTO>(sql);
+        }
+
+        public UtilisateurDTO GetByPseudo(string pseudo)
+        {
+            string sql = $"SELECT * FROM Utilisateur WHERE Pseudo = '{pseudo}'";
+            return connection.Query<UtilisateurDTO>(sql, new { pseudo }).FirstOrDefault();
+        }
+
         public UtilisateurDTO GetUserById(int id)
         {
             string sql = $"SELECT * From Utilisateur WHERE UtilisateurId = {id}";
@@ -34,11 +48,12 @@ namespace DAL.Services
         }
 
         public UtilisateurDTO Login(string email, string mdp)
-        {      
+        {   
             string sql = $"SELECT * From Utilisateur WHERE Email = '{email}' AND Mdp = [dbo].[ProjetFinalHash]('{mdp}')";
             string sql2 = $"UPDATE Utilisateur SET Connecte = 1 WHERE Email = '{email}' AND Mdp = [dbo].[ProjetFinalHash]('{mdp}')";
             connection.Execute(sql2, new { email, mdp });
-            return connection.Query<UtilisateurDTO>(sql, new { email, mdp }).FirstOrDefault(); 
+            return connection.QueryFirstOrDefault<UtilisateurDTO>(sql, new { email, mdp });
+           
             
         }
 
@@ -59,6 +74,12 @@ namespace DAL.Services
         { 
             string sql = $"exec ProjetFinalRegister @Pdp = '{u.Pdp}', @Nom = '{u.Nom}', @Prenom = '{u.Prenom}', @Email = '{u.Email}', @Pseudo = '{u.Pseudo}', @Mdp = '{u.Mdp}'";
             connection.Execute(sql, u);
+        }
+
+        public void UpdateNomPrenom(string nom, string prenom, int id)
+        {
+            string sql = $"UPDATE Utilisateur SET Nom = '{nom}', Prenom = '{prenom}' WHERE UtilisateurId = {id}";
+            connection.Execute(sql, new {nom, prenom, id});
         }
     }
 }
