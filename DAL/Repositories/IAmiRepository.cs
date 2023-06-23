@@ -11,9 +11,10 @@ namespace DAL.Repositories
     public interface IAmiRepository
     {
         public void addFriend(int friendId, int userId);
-        public IEnumerable<AmiDTO> GetAllFriend(int id);
+        public IEnumerable<AmiDTO> GetAllFriend();
         public void UpdateAmiConnecteLogin(int id);
         public void UpdateAmiConnecteLogout(int id);
+
 
     }
 }

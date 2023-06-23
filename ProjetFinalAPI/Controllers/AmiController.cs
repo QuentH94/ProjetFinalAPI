@@ -25,9 +25,9 @@ namespace ProjetFinalAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<AmiDTO> GetAll(int id)
+        public ActionResult<AmiDTO> GetAll()
         {
-            return Ok(_amiService.GetAllFriend(id));
+            return Ok(_amiService.GetAllFriend());
         }
 
     }

@@ -29,9 +29,9 @@ namespace DAL.Services
             connection.Execute(sql, new { friendId, userId });
         }
 
-        public IEnumerable<AmiDTO> GetAllFriend(int id)
+        public IEnumerable<AmiDTO> GetAllFriend()
         {
-            string sql = $"SELECT * FROM Ami WHERE UtilisateurId = {id}";
+            string sql = $"SELECT * FROM Ami";
             return connection.Query<AmiDTO>(sql);
         }
 
