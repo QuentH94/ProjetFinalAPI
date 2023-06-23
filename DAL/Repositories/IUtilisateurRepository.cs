@@ -10,7 +10,7 @@ namespace DAL.Repositories
 {
     public interface IUtilisateurRepository
     {
-       void Register(Utilisateur u);
+        public void Register(Utilisateur u);
         public bool EmailAlreadyUsed(string email);
         public bool PseudoAlreadyUsed(string pseudo);
         public UtilisateurDTO Login(string email, string mdp);
@@ -19,6 +19,8 @@ namespace DAL.Repositories
         public IEnumerable<UtilisateurDTO> GetAll();
         public UtilisateurDTO GetByPseudo(string pseudo);
         public void UpdateNomPrenom(string nom, string prenom, int id);
-        
+        public UtilisateurDTO GetByEmail(string email);
+
+
     }
 }

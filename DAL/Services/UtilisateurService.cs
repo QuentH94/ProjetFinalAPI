@@ -21,7 +21,7 @@ namespace DAL.Services
             this.connection = connection;
            
         }
-
+    
         public bool EmailAlreadyUsed(string email)
         {
             string sql = $"SELECT CAST(CASE WHEN EXISTS (SELECT email FROM Utilisateur WHERE email = '{email}') THEN 1 ELSE 0 END as BIT)";
@@ -33,6 +33,12 @@ namespace DAL.Services
         {
             string sql = $"SELECT * FROM Utilisateur";
             return connection.Query<UtilisateurDTO>(sql);
+        }
+
+        public UtilisateurDTO GetByEmail(string email)
+        {
+            string sql = $"SELECT * FROM Utilisateur WHERE Email = '{email}'";
+            return connection.Query<UtilisateurDTO>(sql, new { email }).FirstOrDefault();
         }
 
         public UtilisateurDTO GetByPseudo(string pseudo)

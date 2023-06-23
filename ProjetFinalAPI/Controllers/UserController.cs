@@ -12,12 +12,14 @@ namespace ProjetFinalAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUtilisateurRepository _utilisateurService;
+        private readonly IAmiRepository _amiService;
         private readonly ILoginService _loginService;
 
-        public UserController(IUtilisateurRepository utilisateurService, ILoginService loginService)
+        public UserController(IUtilisateurRepository utilisateurService, ILoginService loginService, IAmiRepository amiService)
         {
             _utilisateurService = utilisateurService;
             _loginService = loginService;
+            _amiService = amiService;
         }
 
         [HttpPost]
@@ -38,6 +40,8 @@ namespace ProjetFinalAPI.Controllers
                 if (_utilisateurService.EmailAlreadyUsed(loginDto.Email))
                 {
                     string? jwt = _loginService.Login(loginDto.Email,loginDto.Mdp);
+                    UtilisateurDTO u = _utilisateurService.GetByEmail(loginDto.Email);
+                    _amiService.UpdateAmiConnecteLogin(u.UtilisateurId);
 
                     if (!string.IsNullOrEmpty(jwt))
                     {
@@ -51,6 +55,8 @@ namespace ProjetFinalAPI.Controllers
         [HttpPut("Logout")]
         public IActionResult Logout(int id)
         {
+            UtilisateurDTO u = _utilisateurService.GetUserById(id);
+            _amiService.UpdateAmiConnecteLogout(u.UtilisateurId);
             _utilisateurService.Logout(id);
             return Ok();
         }
@@ -91,6 +97,8 @@ namespace ProjetFinalAPI.Controllers
             }
             return BadRequest();
         }
+
+    
 
     }
 }

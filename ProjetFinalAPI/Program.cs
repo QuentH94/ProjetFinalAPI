@@ -43,6 +43,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+
+builder.Services.AddScoped<IAmiRepository, AmiService>(sp =>
+    new AmiService(
+        new System.Data.SqlClient.SqlConnection(
+            builder.Configuration.GetConnectionString("default"))));
+
 builder.Services.AddScoped<IUtilisateurRepository, UtilisateurService>(sp =>
     new UtilisateurService(
         new System.Data.SqlClient.SqlConnection(
