@@ -17,18 +17,41 @@ namespace ProjetFinalAPI.Controllers
             _amiService = amiService;
         }
 
-        [HttpPost("AddFriend")]
-        public IActionResult AddFriend(int friendId, int userId)
+        [HttpPost("SendFriendResquest")]
+        public IActionResult SendFriendResquest(int user1, int user2)
         {
-            _amiService.addFriend(friendId, userId);
+            _amiService.SendFriendResquest(user1, user2);
             return Ok();
         }
 
-        [HttpGet]
-        public ActionResult<AmiDTO> GetAll()
+        [HttpGet("Ami")]
+        public ActionResult<AmiDTO> GetAllFriend()
         {
             return Ok(_amiService.GetAllFriend());
         }
 
+        [HttpGet("Invitation")]
+        public ActionResult<AmiDTO> GetAllInvitation()
+        {
+            return Ok(_amiService.GetAllInvitations());
+        }
+        [HttpPut("Accepted")]
+        public IActionResult Accepted(int id)
+        {
+            _amiService.Accepted(id);
+            return Ok();
+        }
+        [HttpPut("Refused")]
+        public IActionResult Refused(int id)
+        {
+            _amiService.Refused(id);
+            return Ok();
+        }
+        [HttpPatch("AddFriend")]
+        public IActionResult AddFriend(int u1, int u2)
+        {
+            _amiService.AddFriend(u1, u2);
+            return Ok();
+        }
     }
 }

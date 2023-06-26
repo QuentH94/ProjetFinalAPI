@@ -41,7 +41,7 @@ namespace ProjetFinalAPI.Controllers
                 {
                     string? jwt = _loginService.Login(loginDto.Email,loginDto.Mdp);
                     UtilisateurDTO u = _utilisateurService.GetByEmail(loginDto.Email);
-                    _amiService.UpdateAmiConnecteLogin(u.UtilisateurId);
+                    
 
                     if (!string.IsNullOrEmpty(jwt))
                     {
@@ -56,7 +56,7 @@ namespace ProjetFinalAPI.Controllers
         public IActionResult Logout(int id)
         {
             UtilisateurDTO u = _utilisateurService.GetUserById(id);
-            _amiService.UpdateAmiConnecteLogout(u.UtilisateurId);
+            
             _utilisateurService.Logout(id);
             return Ok();
         }
