@@ -18,9 +18,9 @@ namespace ProjetFinalAPI.Controllers
         }
 
         [HttpPost("SendFriendResquest")]
-        public IActionResult SendFriendResquest(int user1, int user2)
+        public IActionResult SendFriendResquest(int user1, int user2, int demandeur)
         {
-            _amiService.SendFriendResquest(user1, user2);
+            _amiService.SendFriendResquest(user1, user2, demandeur);
             return Ok();
         }
 
@@ -39,19 +39,28 @@ namespace ProjetFinalAPI.Controllers
         public IActionResult Accepted(int id)
         {
             _amiService.Accepted(id);
+            _amiService.DeleteInvitation(id);
             return Ok();
         }
         [HttpPut("Refused")]
         public IActionResult Refused(int id)
         {
             _amiService.Refused(id);
+            _amiService.DeleteInvitation(id);
             return Ok();
         }
-        [HttpPatch("AddFriend")]
-        public IActionResult AddFriend(int u1, int u2)
+        [HttpDelete("DeleteInvitation")]
+        public IActionResult DeleteInvitation(int id)
         {
-            _amiService.AddFriend(u1, u2);
+            _amiService.DeleteInvitation(id);
             return Ok();
         }
+        [HttpDelete("DeleteFriend")]
+        public IActionResult DeleteFriend(int user1, int user2)
+        {
+            _amiService.DeleteFriend(user1, user2);
+            return Ok();
+        }
+
     }
 }

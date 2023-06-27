@@ -12,5 +12,6 @@ namespace DAL.DTO
         public int Id_Status { get; set; }
         public int Utilisateur1 { get; set; }
         public int Utilisateur2 { get; set; }
+        public int Demandeur { get; set; }
     }
 }

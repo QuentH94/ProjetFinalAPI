@@ -10,12 +10,16 @@ namespace DAL.Repositories
 {
     public interface IAmiRepository
     {
-        public void SendFriendResquest(int user1, int user2);
+        public void SendFriendResquest(int user1, int user2, int demandeur);
         public IEnumerable<AmiDTO> GetAllFriend();
         public IEnumerable<InvitationDTO> GetAllInvitations();
         public void Accepted(int id);
         public void Refused(int id);
-        public void AddFriend(int u1, int u2);
+        public void DeleteInvitation(int id);
+        public void DeleteFriend(int user1, int user2);
+
+
+
 
 
     }

@@ -44,6 +44,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
+builder.Services.AddScoped<IMessageGlobalRepository, MessageGlobalService>(sp =>
+    new MessageGlobalService(
+        new System.Data.SqlClient.SqlConnection(
+            builder.Configuration.GetConnectionString("default"))));
+
 builder.Services.AddScoped<IAmiRepository, AmiService>(sp =>
     new AmiService(
         new System.Data.SqlClient.SqlConnection(
