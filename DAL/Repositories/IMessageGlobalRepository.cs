@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    internal interface IMessageGlobalRepository
+    public interface IMessageGlobalRepository
     {
+        public IEnumerable<MessageGlobalDTO> GetAllMessage();
+        public void AddMessageGlobal(int expediteur, string message);
     }
 }

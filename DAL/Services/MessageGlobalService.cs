@@ -22,9 +22,10 @@ namespace DAL.Services
 
         }
 
-        public void AddMessage(int expediteur, string message)
+        public void AddMessageGlobal(int expediteur, string message)
         {
-            throw new NotImplementedException();
+            string sql = $"Exec AddMessageGlobal @expediteur ={expediteur} ,@message = '{message}'";
+            connection.Execute(sql, new { expediteur, message });
         }
 
         public IEnumerable<MessageGlobalDTO> GetAllMessage()

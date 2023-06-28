@@ -11,5 +11,6 @@ namespace DAL.DTO
         public int Id_MessageGlobal { get; set; }
         public int Expediteur { get; set; }
         public string Message { get; set; } = string.Empty;
+        public DateTime Heure { get; set; }
     }
 }
