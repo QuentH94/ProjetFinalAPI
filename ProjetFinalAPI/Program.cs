@@ -47,7 +47,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddSignalR();
-builder.Services.AddRouting();
+//builder.Services.AddRouting();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", builder =>
@@ -86,23 +86,31 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-app.UseRouting();
+//app.UseRouting();
 
 app.UseCors("CorsPolicy");
 
-app.UseWebSockets(new Microsoft.AspNetCore.Builder.WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(120) });
+//app.UseWebSockets(new Microsoft.AspNetCore.Builder.WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(120) });
+//app.UseAuthorization();
+//app.UseAuthentication();
+
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapHub<MessageGlobalHub>("/MessageGlobalHub", options =>
+//    {
+//        options.Transports = HttpTransportType.WebSockets;
+//    });
+
+//    endpoints.MapControllers();
+//});
+//app.UseCors(o => o.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseHttpsRedirection();
+
 app.UseAuthorization();
-app.UseAuthentication();
+app.MapHub<MessageGlobalHub>(("/MessageGlobalHub"));
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapHub<MessageGlobalHub>("/MessageGlobalHub", options =>
-    {
-        options.Transports = HttpTransportType.WebSockets;
-    });
-    
-    endpoints.MapControllers();
-});
+app.MapControllers();
 
+app.Run();
 
 app.Run();
