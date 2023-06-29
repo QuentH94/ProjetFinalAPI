@@ -1,6 +1,7 @@
 ﻿using DAL.DTO;
 using DAL.Repositories;
 using Dapper;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,14 +19,12 @@ namespace DAL.Services
         public MessageGlobalService(IDbConnection connection)
         {
             this.connection = connection;
-
-
         }
-
         public void AddMessageGlobal(int expediteur, string message)
         {
             string sql = $"Exec AddMessageGlobal @expediteur ={expediteur} ,@message = '{message}'";
-            connection.Execute(sql, new { expediteur, message });
+             connection.Execute(sql, new { expediteur, message });
+                
         }
 
         public IEnumerable<MessageGlobalDTO> GetAllMessage()

@@ -1,6 +1,7 @@
 ﻿using DAL.DTO;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ProjetFinalAPI.Controllers
 {
@@ -8,21 +9,29 @@ namespace ProjetFinalAPI.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-        private readonly IMessageGlobalRepository _messageGlobalService;
+        private readonly IMessageGlobalRepository _messageGlobalRepository;
+        private readonly IHubContext<MessageGlobalHub> _messageHubContext;
 
-        public MessageController(IMessageGlobalRepository messageGlobalService)
+        public MessageController(IMessageGlobalRepository messageGlobalRepository, IHubContext<MessageGlobalHub> messageHubContext)
         {
-            _messageGlobalService = messageGlobalService;
+            _messageGlobalRepository = messageGlobalRepository;
+            _messageHubContext = messageHubContext;
         }
+
         [HttpGet("MessageGlobal")]
         public ActionResult<MessageGlobalDTO> GetAllMessage()
         {
-            return Ok(_messageGlobalService.GetAllMessage());  
+            return Ok(_messageGlobalRepository.GetAllMessage());
         }
+
         [HttpPost("AddMessageGlobal")]
         public IActionResult AddMessageGlobal(int expediteur, string message)
         {
-            _messageGlobalService.AddMessageGlobal(expediteur,message);
+            _messageGlobalRepository.AddMessageGlobal(expediteur, message);
+
+            // Envoyer le message à tous les clients via SignalR
+            _messageHubContext.Clients.All.SendAsync("ReceiveMessage", expediteur, message);
+
             return Ok();
         }
     }

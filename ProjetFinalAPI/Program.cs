@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ProjetFinalAPI;
+using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +46,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
-
+builder.Services.AddSignalR();
+builder.Services.AddRouting();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder =>
+        builder.WithOrigins("http://localhost:4200")
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials()
+    );
+});
 builder.Services.AddScoped<IMessageGlobalRepository, MessageGlobalService>(sp =>
     new MessageGlobalService(
         new System.Data.SqlClient.SqlConnection(
@@ -67,13 +80,29 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors(o => o.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
 
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
-app.MapControllers();
+app.UseRouting();
+
+app.UseCors("CorsPolicy");
+
+app.UseWebSockets(new Microsoft.AspNetCore.Builder.WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(120) });
+app.UseAuthorization();
+app.UseAuthentication();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<MessageGlobalHub>("/MessageGlobalHub", options =>
+    {
+        options.Transports = HttpTransportType.WebSockets;
+    });
+    
+    endpoints.MapControllers();
+});
+
 
 app.Run();
