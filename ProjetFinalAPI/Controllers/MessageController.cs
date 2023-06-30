@@ -10,9 +10,9 @@ namespace ProjetFinalAPI.Controllers
     public class MessageController : ControllerBase
     {
         private readonly IMessageGlobalRepository _messageGlobalRepository;
-        private readonly IHubContext<MessageGlobalHub> _messageHubContext;
+        private readonly IHubContext<SignalRHub> _messageHubContext;
 
-        public MessageController(IMessageGlobalRepository messageGlobalRepository, IHubContext<MessageGlobalHub> messageHubContext)
+        public MessageController(IMessageGlobalRepository messageGlobalRepository, IHubContext<SignalRHub> messageHubContext)
         {
             _messageGlobalRepository = messageGlobalRepository;
             _messageHubContext = messageHubContext;
@@ -30,9 +30,14 @@ namespace ProjetFinalAPI.Controllers
             _messageGlobalRepository.AddMessageGlobal(expediteur, message);
 
             // Envoyer le message à tous les clients via SignalR
-            _messageHubContext.Clients.All.SendAsync("ReceiveMessage", expediteur, message);
+            //_messageHubContext.Clients.All.SendAsync("ReceiveMessage");
 
             return Ok();
+        }
+        [HttpGet("GetLastMessageGlobal")]
+        public ActionResult<MessageGlobalDTO> GetLastMessageGlobal()
+        {
+            return Ok(_messageGlobalRepository.GetLastMessageGlobal());
         }
     }
 }

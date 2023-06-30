@@ -11,5 +11,6 @@ namespace DAL.Repositories
     {
         public IEnumerable<MessageGlobalDTO> GetAllMessage();
         public void AddMessageGlobal(int expediteur, string message);
+        public MessageGlobalDTO GetLastMessageGlobal();
     }
 }

@@ -107,7 +107,7 @@ app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-app.MapHub<MessageGlobalHub>(("/MessageGlobalHub"));
+app.MapHub<SignalRHub>(("/SignalRHub"));
 
 app.MapControllers();
 

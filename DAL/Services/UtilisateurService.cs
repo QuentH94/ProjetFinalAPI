@@ -44,7 +44,17 @@ namespace DAL.Services
         public UtilisateurDTO GetByPseudo(string pseudo)
         {
             string sql = $"SELECT * FROM Utilisateur WHERE Pseudo = '{pseudo}'";
+            try
+            {
+
             return connection.Query<UtilisateurDTO>(sql, new { pseudo }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex);
+                return null;
+            }
         }
 
         public UtilisateurDTO GetUserById(int id)
