@@ -57,6 +57,12 @@ builder.Services.AddCors(options =>
                .AllowCredentials()
     );
 });
+
+builder.Services.AddScoped<IMessagePriveRepository, MessagePriveService>(sp =>
+    new MessagePriveService(
+        new System.Data.SqlClient.SqlConnection(
+            builder.Configuration.GetConnectionString("default"))));
+
 builder.Services.AddScoped<IMessageGlobalRepository, MessageGlobalService>(sp =>
     new MessageGlobalService(
         new System.Data.SqlClient.SqlConnection(
